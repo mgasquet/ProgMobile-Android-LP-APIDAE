@@ -41,7 +41,7 @@ rm -rf /home/vb/gradle/daemon
 3. Lancez **Android Studio** avec la commande suivante :
 
 ```bash
-/opt/android-studio/studio.sh
+/opt/android-studio/bin/studio.sh
 ```
 
 4. Choisissez l'option **Do not import Settings**.
