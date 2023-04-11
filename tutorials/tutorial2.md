@@ -326,10 +326,7 @@ Pour nous aider à tout cela, nous pouvons utiliser les fameuses **annotations**
 
     * `#[Assert\Regex](pattern: ...)` : vérifie que la propriété vérifie l'expression régulière spécifiée.
 
-    * `#[Assert\NotBlank]` : vérifie que la propriété est bien présente dans le `payload`. Cela peut paraître redondant avec le fait que la propriété ne peu pas être nulle dans la base, mais avec cette assertion la vérification est faite au niveau de l'application et non pas d côté de la base (ce qui économise une requête.)
-
-    * `#[Assert\Blank]` : vérifie que la propriété n'est pas présente dans le `payload`. Cela aura un intérêt si on veut autoriser la présence d'une propriété dans le `payload` avec certaines méthodes seulement.
-
+    * `#[Assert\NotBlank]` : vérifie que la propriété est bien présente dans le `payload` et possède une valeur. Cela peut paraître redondant avec le fait que la propriété ne peu pas être nulle dans la base, mais avec cette assertion la vérification est faite au niveau de l'application et non pas d côté de la base (ce qui économise une requête.)
 
     * `#[Assert\NotNull]` : vérifie que la propriété n'est pas nulle (du côté de l'application). Cela sginifie que la propriété est présente, mais a une valeur nulle.
 
@@ -1076,43 +1073,58 @@ Concernant les deux paramètres dont a besoin cette classe, ils seront **inject�
 4. Videz le cache et essayez de créer un nouvel utilisateur. Il faudra bien préciser `plainPassword` dans le `payload`. Allez vérifier le résultat dans la base de données.
 </div>
 
-### Contexte de validation
+### Contexte de dénormalisation
 
-Actuellement, si on essaye de faire un `PATCH` sur l'utilisateur, celui-ci nous demandera de rentrer le mot de passe. Or, dans un patch, on doit pouvoir mettre à jour seulement les attributs que l'on veut. Nous allons utiliser un mécanisme appelé **contextes de validation** pour rendre optionnelles certaines **assertions** selon la méthode utilisée.
+Actuellement, si on essaye de faire un `PATCH` sur l'utilisateur, celui-ci nous demandera de rentrer le mot de passe. Or, dans un patch, on doit pouvoir mettre à jour seulement les attributs que l'on veut. Nous allons utiliser un mécanisme appelé **contextes de dénormalisation** (quand on transforme le `payload` en objet) pour ignorer certaines propriétés présente dans le `payload` si un certain **groupe** est activé.
 
-Au niveau d'une `assertion`, il est possible de spécifier une liste de **groupes** pour lesquels l'assertion doit être vérifié. Par exemple :
+Au niveau d'une propriété, il suffit de rajouter le `groupe` (dans l'annotation `#[Groups(...)]` que vous avez déjà utilisé pour la normalisation) pour lequel la propriété ne doit pas être ignoré. Par exemple : 
+
+```php
+
+//Si 'entite:create' et 'entite:update' sont des groupes de dénormalisation.
+
+//La propriété n'est pas ignorée
+#[Groups(['entite:read', 'entite:create', 'entite:update'])]
+private ?string $prop1 = null;
+
+//Si le groupe 'entite:create' est actif, la propriété n'est pas ignorée, mais si le groupe 'entite:update' est actif, elle est ignorée.
+#[Groups(['entite:read', 'entite:create'])]
+private ?string $prop2 = null;
+```
+
+De plus, on peut désactiver la vérification de certaines assertions selon le groupe activé. Pour cela, il suffit de préciser le paramètre `groups` dans l'assertion.
+
+Par exemple :
 
 `#[Assert\NotBlank(groups: ['user:create'])]` : n'est appliqué que quand le groupe `user:create` est activé.
 
 `#[Assert\Length(min: 2, max: 10, groups: ['user:create', 'user:update'])]` : n'est appliqué que quand le groupe `user:create` ou `user:update` est activé.
 
-Pour définir quel groupe activer sur telle ou telle méthode, on spécifie un paramètre `validationContext` au niveau de l'objet lié à la méthode dans le paramètre `operations` de l'annotation `#[ApiResource]`.
+Pour définir quel groupe activer sur telle ou telle méthode, on spécifie un paramètre `denormalizationContext` au niveau de l'objet lié à la méthode dans le paramètre `operations` de l'annotation `#[ApiResource]`.
 
 Par exemple :
 ```php
 #[ApiResource(
     operations: [
-        new Put(validationContext: ["groups" => ["Default", "user:udpate"]]),
+        new Put(denormalizationContext: ["groups" => ["user:udpate"]]),
     ],
     ...
 )]
 ```
 
-Le groupe `Default` est généralement nécessaire, car il permet de prendre en compte les assertions où aucun groupe n'est spécifié.
-
 <div class="exercise">
 
-1. Pour l'opération `POST` (toujours sur les utilisateurs), activez les groupes `Default` et `user:create` pour le contexte de validation.
+1. Pour l'opération `POST` (toujours sur les utilisateurs), activez le groupe `user:create` pour le contexte de dénormalisation.
 
-2. Pour chaque attribut où vous avez placé les assertions `NotBlank` et `NotNull`, spécifiez le groupe de validation `user:create`.
+2. Pour chaque attribut où vous avez placé les assertions `NotBlank` et `NotNull`, spécifiez le groupe de dénormalisation `user:create` pour ces annotaitons et ajoutez aussi ce groupe à la liste des groupes de l'attribut (donc, pas ignoré quand on créé).
 
 3. Videz le cache. Tentez de mettre à jour seulement le login d'un utilisateur (avec `PATCH`). Cela devrait fonctionner.
 
 4. Tentez de créer un utilisateur sans spécifier le mot de passe, cela ne devrait pas fonctionner.
 
-5. On voudrait interdire à un utilisateur de modifier son login. Pour l'opération `PATCH`, activez les groupes `Default` et `user:update` pour le contexte de validation. Ajoutez une assertion `Blank` sur la propriété `login` (signifie "ne doit pas apparaitre") valide seulement pour le groupe `user:udpate`.
+5. On voudrait interdire à un utilisateur de modifier son login. Pour l'opération `PATCH`, activez le groupe `user:update` pour le contexte de dénormalisation. Pour cela, activez le groupe `user:update` pour le contexte de dénormalisation de la méthode `PATCH` et ajoutez le groupe `user:update` seulement sur les propriétés qui peuvent être mises à jour avec un `PATCH` (donc seulement l'adresse email et le mot de passe en clair...)
 
-6. Videz le cache puis vérifiez que la création d'un utilisateur (avec `POST`) marche toujours et qu'avec `PATCH` il est possible de mettre à jour son adresse mail, mais pas son login.
+6. Videz le cache puis vérifiez que la création d'un utilisateur (avec `POST`) marche toujours et qu'avec `PATCH` il est possible de mettre à jour son adresse mail, mais pas son login (du moins, la modificaiton est ignorée).
 
 </div>
 
