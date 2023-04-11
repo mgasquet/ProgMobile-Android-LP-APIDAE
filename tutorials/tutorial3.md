@@ -1093,7 +1093,7 @@ Pour se déconnecter, il suffit que le client supprime son `JWT` en local. En ef
 
 </div>
 
-En cas d'échec de la connexion (si les identifiants ne sont pas bons), notre application doit être capable de détecter l'erreur et prévenir l'utilisateur. Lors du **TD1**, les `Consumer` vous ont été présenté, mais nous avions aussi parlé des `Runnable` qui ont un rôle similaire (représente une fonction, mais qui ne prend aucuns paramètres et ne renvoi rien).
+En cas d'échec de la connexion (si les identifiants ne sont pas bons), notre application doit être capable de détecter l'erreur et prévenir l'utilisateur. Dans le [cours]({{site.baseurl}}/classes/cours1.pdf), les `Consumer` vous ont été présenté, mais nous avions aussi parlé des `Runnable` qui ont un rôle similaire (représente une fonction, mais qui ne prend aucuns paramètres et ne renvoi rien).
 
 Dans le `JsonHttpResponseHandler`, il est possible de détecter l'échec de l'aboutissement d'une requête et de réagir en fonction, en implémentant la méthode :
 
