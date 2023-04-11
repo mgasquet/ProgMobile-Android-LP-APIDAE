@@ -104,6 +104,8 @@ Tour d'abord, il va falloir créer un projet avec **Symfony**. Nous pouvons fair
    setfacl -R -m d:u:www-data:r-w-x ~/public_html
    ```
 
+   Il peut y avoir quelques permissions non accordées, ce n'est pas grave.
+
 4. Ouvrez le répertoire du projet avec votre **IDE** favori (de préférence, `PHPStorm`).
 
 5. Téléchargez le [fichier d'accès au serveur]({{site.baseurl}}/assets/TD2/htaccess), renommez-le `.htaccess` et placez-le dans le sous-dossier `public`.
@@ -168,7 +170,7 @@ Si tout fonctionne, nous allons pouvoir installer **API Platform** et commencer 
 
     Retenez bien cette commande, vous en aurez besoin plusieurs fois afin que l'application puisse prendre en compte certains changements effectués.
 
-6. Rendez-vous sur votre site à l'adresse : [https://webinfo.iutmontp.univ-montp2.fr/~votre_login/chemin_dossier_projet/public/api/](https://webinfo.iutmontp.univ-montp2.fr/~votre_login/chemin_dossier_projet/public/api/). Adaptez l'URL selon votre situation. Si cela fonctionne, tout est prêt. Vous devriez voir une page liée à **API Platform**.
+6. Rendez-vous sur votre site à l'adresse : [https://webinfo.iutmontp.univ-montp2.fr/~votre_login/chemin_dossier_projet/public/api/](https://webinfo.iutmontp.univ-montp2.fr/~votre_login/chemin_dossier_projet/public/api/). Adaptez l'URL selon votre situation (avec le serveur local de `Symfony`, il ne faut pas mettre le "public" dans l'URL). Si cela fonctionne, tout est prêt. Vous devriez voir une page liée à **API Platform**.
 
 </div>
 
