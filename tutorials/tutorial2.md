@@ -108,7 +108,7 @@ Tour d'abord, il va falloir créer un projet avec **Symfony**. Nous pouvons fair
 
 5. Téléchargez le [fichier d'accès au serveur]({{site.baseurl}}/assets/TD2/htaccess), renommez-le `.htaccess` et placez-le dans le sous-dossier `public`.
 
-6. Téléchargez un [deuxième fichier d'accès]({{site.baseurl}}/assets/TD2/htaccess2), renommez-le `.htaccess`et placez-le à la racine de votre projet. Le rôle de ce fichier est capital, car il permet de protéger vos fichiers de configuration pour qu'ils ne soient pas lisibles par tout le monde ! (par exemple, éviter d'exposer le mot de passe BDD...)
+6. Téléchargez un [deuxième fichier d'accès]({{site.baseurl}}/assets/TD2/htaccess2), renommez-le `.htaccess` et placez-le à la racine de votre projet. Le rôle de ce fichier est capital, car il permet de protéger vos fichiers de configuration pour qu'ils ne soient pas lisibles par tout le monde ! (par exemple, éviter d'exposer le mot de passe BDD...)
 
 7. Testez que votre projet a bien été initialisé en vous rendant à l'adresse correspondant à votre situation :
 
