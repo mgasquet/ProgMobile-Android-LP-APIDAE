@@ -152,11 +152,6 @@ Si tout fonctionne, nous allons pouvoir installer **API Platform** et commencer 
 
     * `nom_base` : le nom de la base de données. À l'IUT, il s'agit encore de votre login, sinon, vous pouvez mettre l nom que vous voulez (doctrine se chargera de la créer).
 
-    <!--À la place, vous pouvez aussi utiliser une base de données `SQLITE` (stockée dans un fichier) :
-
-    `DATABASE_URL="sqlite:///%kernel.project_dir%/var/the_feed.db"` (il n'y a rien à changer).
-    -->
-
     **Attention**, si vous comptez déposer votre projet sur un repository git **public**, utilisez plutôt un fichier `.env.local` à la place, qui ne sera ignoré lors des commits (pour ne pas exposer vos mots de passe).
 
 4. Exécutez la commande suivante pour créer la base de données (inutile si vous travaillez sur la base de l'IUT) :
