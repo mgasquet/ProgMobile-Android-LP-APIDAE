@@ -1100,29 +1100,31 @@ Par exemple :
 
 `#[Assert\Length(min: 2, max: 10, groups: ['user:create', 'user:update'])]` : n'est appliqué que quand le groupe `user:create` ou `user:update` est activé.
 
-Pour définir quel groupe activer sur telle ou telle méthode, on spécifie un paramètre `denormalizationContext` au niveau de l'objet lié à la méthode dans le paramètre `operations` de l'annotation `#[ApiResource]`.
+Pour définir quel groupe activer sur telle ou telle méthode, on spécifie un paramètre `denormalizationContext` et un paramètre `validationContext` au niveau de l'objet lié à la méthode dans le paramètre `operations` de l'annotation `#[ApiResource]`.
 
 Par exemple :
 ```php
 #[ApiResource(
     operations: [
-        new Put(denormalizationContext: ["groups" => ["user:udpate"]]),
+        new Put(denormalizationContext: ["groups" => ["user:udpate"]], validationContext: ["groups" => ["Default", "user:udpate"]]) ,
     ],
     ...
 )]
 ```
 
+Le groupe `Default` est important pour `validationContext` ca ril permettra d'activer les assertions où aucun gorupes n'est précisé.
+
 <div class="exercise">
 
-1. Pour l'opération `POST` (toujours sur les utilisateurs), activez le groupe `user:create` pour le contexte de dénormalisation.
+1. Pour l'opération `POST` (toujours sur les utilisateurs), activez le groupe `user:create` pour le contexte de dénormalisation et de validation. Dans le contexte de validaiton, précisez aussi le groupe `Default`.
 
-2. Pour chaque attribut où vous avez placé les assertions `NotBlank` et `NotNull`, spécifiez le groupe de dénormalisation `user:create` pour ces annotaitons et ajoutez aussi ce groupe à la liste des groupes de l'attribut (donc, pas ignoré quand on créé).
+2. Pour chaque attribut où vous avez placé les assertions `NotBlank` et `NotNull`, spécifiez le groupe `user:create` pour ces annotations et ajoutez aussi ce groupe à la liste des groupes de l'attribut (donc, pas ignoré quand on fait un `POST`).
 
 3. Videz le cache. Tentez de mettre à jour seulement le login d'un utilisateur (avec `PATCH`). Cela devrait fonctionner.
 
 4. Tentez de créer un utilisateur sans spécifier le mot de passe, cela ne devrait pas fonctionner.
 
-5. On voudrait interdire à un utilisateur de modifier son login. Pour l'opération `PATCH`, activez le groupe `user:update` pour le contexte de dénormalisation. Pour cela, activez le groupe `user:update` pour le contexte de dénormalisation de la méthode `PATCH` et ajoutez le groupe `user:update` seulement sur les propriétés qui peuvent être mises à jour avec un `PATCH` (donc seulement l'adresse email et le mot de passe en clair...)
+5. On voudrait interdire à un utilisateur de modifier son login. Pour faire cela, au niveau de l'opération `PATCH`, activez le groupe `user:update` pour le contexte de dénormalisation et de validation (et `Default` pour le contexte de validation...). Ajoutez ensuite le groupe `user:update` dans la liste des groupes des propriétés qui peuvent être mises à jour avec un `PATCH` (donc seulement l'adresse email et le mot de passe en clair...)
 
 6. Videz le cache puis vérifiez que la création d'un utilisateur (avec `POST`) marche toujours et qu'avec `PATCH` il est possible de mettre à jour son adresse mail, mais pas son login (du moins, la modificaiton est ignorée).
 
