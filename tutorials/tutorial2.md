@@ -238,7 +238,7 @@ Nous allons maintenant synchroniser cette classe avec la base de données.
     doctrine:
         dbal:
             ...
-            schema_filter: ~_api$~
+            schema_filter: ~(_api|doctrine_migration_versions)$~
     ```
 
     Cela permettra de ne prendre en compte que les tables qui finissent par `_api` (et donc de ne pas supprimer les autres).
@@ -343,7 +343,7 @@ Pour nous aider à tout cela, nous pouvons utiliser les fameuses **annotations**
 
 * `#[ApiProperty(param1: ..., param2: ...)]` : à placer au-dessus d'une propriété de la classe. Permet de configurer la présentation de la propriété et ajouter certaines règles. Par exemple :
 
-    * `writable: true/false` : autorise ou interdit l'écriture de cette propriété lors de la création/modification (par défaut, autorisé si non précisé).
+    * `writable: true/false` : autorise ou interdit l'écriture de cette propriété lors de la création/modification (par défaut, autorisé si non précisé). Si la propriété est présente dans le payload, elle est ignorée.
 
     * `readable: true/false` : renvoie ou non la propriété lorsqu'on lit la ressource (par défaut, autorisé).
 
@@ -357,7 +357,7 @@ Concernant la **génération automatique** d'une propriété, il suffit de crée
 
 <div class="exercise">
 
-1. Faites les modifications nécessaires au niveau de l'entité `Publication` afin d'empêcher qu'un client puisse entrer une date dans son `payload` et que celle-ci soit plutôt générée automatiquement du côté du serveur.
+1. Faites les modifications nécessaires au niveau de l'entité `Publication` afin q'une date entrée dans le `payload` soit ignorée (qu'on ne puisse pas l'écrire) et que celle-ci soit plutôt générée automatiquement du côté du serveur.
 
 2. Faites en sorte de limiter les messages entre 4 et 200 caractères.
 
