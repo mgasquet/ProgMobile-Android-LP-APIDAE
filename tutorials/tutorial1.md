@@ -96,6 +96,20 @@ Tout au long du **TD**, vous pouvez retrouver les explications nécessaires et l
 
 Vous êtres fin prêts à développer des **applications mobiles**!
 
+Par la suite, si vous avez des erreurs de compatibilité en lançant vos applications, ouvre le **deuxième** fichier `build.gradle` situé dans `Gradle Scripts` et changez la ligne :
+
+    ```groovy
+    implementation 'androidx.appcompat:appcompat:1.6.1'
+    ```
+
+    En :
+
+    ```groovy
+    implementation 'androidx.appcompat:appcompat:1.5.1'
+    ```
+
+    Et appuyez sur le bouton `Sync now` dans le bandeau, juste en dessous de l'onglet. Relancez votre application.
+
 ### Une application basique
 
 Dans le [cours](({{site.baseurl}}/classes/cours1.pdf)), nous avons vu que le développement des "vues" d'une application (les différentes interfaces) se faisait au travers de fichiers `XML` afin de séparer la partie présentation du code métier (un peu à la manière d'un fichier `HTML` séparé de son fichier `JS`). Nous allons donc commencer par développer cette interface.
@@ -366,14 +380,22 @@ Un objet `JSONObject` s'utilise plus ou moins comme une `map`(dictionnaire). On 
 
 ```java
 public void updateMeteo(JSONObject map) {
-    //Temperature de Montpellier
-    //La temperature est dans un sous-objet "main"
-    JSONObject main = map.getJSONObject("main");
-    //La température est un nombre à virgules
-    double temperature = main.getDouble("temp");
+    try {
+        //Temperature de Montpellier
+        //La temperature est dans un sous-objet "main"
+        JSONObject main = map.getJSONObject("main");
+        //La température est un nombre à virgules
+        double temperature = main.getDouble("temp");
+        ...
+    }
+    catch(JSONException e) {
+        e.printStackTrace();
+    }
     ...
 }
 ```
+
+Dès qu'on manipule un `JSONObject`, il ne faut pas oublier de gérer la `JSONException`.
 
 <div class="exercise">
 
