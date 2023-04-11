@@ -1339,7 +1339,7 @@ Par exemple, dans le contexte d'une application de gestion de films :
 ```php
 #[ApiResource(
     operations: [
-        new Delete(security: "is_granted('ROLE_USER') and object.realisateur = user")
+        new Delete(security: "is_granted('ROLE_USER') and object.realisateur == user")
     ]
 )]
 ```
