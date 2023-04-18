@@ -683,7 +683,7 @@ Voici un exemple d'utilisation :
 ```java
 //Conversion de l'adresse email en MD5
 String hash = new String(Hex.encodeHex(DigestUtils.md5(adresseEmail)));
-String gravatarUrl = "http://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
+String gravatarUrl = "https://www.gravatar.com/avatar/" + hash + "?s=204&d=404";
 Picasso picasso = new Picasso.Builder(this).build();
 picasso.load(gravatarUrl).placeholder(R.drawable.imageDefaut).into(imageView);
 ```
