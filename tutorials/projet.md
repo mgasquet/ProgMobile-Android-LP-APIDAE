@@ -85,9 +85,9 @@ Vous êtes aussi libre d'utiliser, en plus de votre API, une autre API externe. 
 
 ## Rendu
 
-Le rendu devra se faire au plus tard le **28 mai** via un dépôt sur Moodle.
+Le rendu devra se faire au plus tard le **17 mai** via un dépôt sur Moodle.
 
-Un seul membre du trinôme dépose une archive **zip** nommée selon le pattern : `NomPrenomMembre1-NomPrenomMembre2.zip`. Cette archive devra contenir :
+Un seul membre du binôme ou trinôme dépose une archive **zip** nommée selon le pattern : `NomPrenomMembre1-NomPrenomMembre2.zip`. Cette archive devra contenir :
 
 * Les sources de votre API REST **sans le dossier vendor**.
 
